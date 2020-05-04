@@ -75,7 +75,10 @@ void Tick(){
 			if (tmpA) {state = S0;} // I don't want to account for holding button
 			break;
 		case S1:
-			if (cnt %3 == 2) {state = S2;}
+			if (tmpA){
+				state = S1_Press;
+			}
+			else if (cnt %3 == 2) {state = S2;}
 			else {state = S1;}
                         break;
 		case S1_Press: 
@@ -85,7 +88,10 @@ void Tick(){
 			if (tmpA) {state = S0;} // I don't want to account for holding button
 			break;
 		case S2:
-			if (cnt %3 == 0) {state = S0;}
+			if (tmpA){
+				state = S2_Press;
+			}
+			else if (cnt %3 == 0) {state = S0;}
                         else {state = S2;}
                         break;
 		case S2_Press: 
