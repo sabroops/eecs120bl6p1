@@ -65,7 +65,7 @@ void Tick(){
 			if (tmpA){
 				state = S0_Press;
 			}
-			else if (cnt %3 == 1) {state = S1;}
+			else if (cnt %9 > 1) {state = S1;}
 			else {state = S0;}
 			break;
 		case S0_Press: 
@@ -78,7 +78,7 @@ void Tick(){
 			if (tmpA){
 				state = S1_Press;
 			}
-			else if (cnt %3 == 2) {state = S2;}
+			else if (cnt %9 > 4 ) {state = S2;}
 			else {state = S1;}
                         break;
 		case S1_Press: 
@@ -91,7 +91,7 @@ void Tick(){
 			if (tmpA){
 				state = S2_Press;
 			}
-			else if (cnt %3 == 0) {state = S0;}
+			else if (cnt % 9 > 7) {state = S0;}
                         else {state = S2;}
                         break;
 		case S2_Press: 
@@ -153,7 +153,7 @@ int main(void) {
     DDRA = 0x00; PORTA = 0xFF;
     DDRB = 0xFF; PORTB = 0x00;
     /* Insert your solution below */
-	TimerSet(300);
+	TimerSet(100);
 	TimerOn();
     while (1){
 	tmpA = ~PINA;
