@@ -54,6 +54,7 @@ enum States{Start, S0, S0_Press, S0_Rel, S1, S1_Press, S1_Rel, S2, S2_Press, S2_
 unsigned char  tmpA = 0;
 unsigned char tmpC = 0x00;
 unsigned char cnt = 0;
+unsigned char disrespect = 0;
 
 
 void Tick(){
@@ -72,7 +73,7 @@ void Tick(){
 			if (!tmpA){state = S0_Rel;}
 			break;
 		case S0_Rel:
-			if (tmpA) {state = S0;} // I don't want to account for holding button
+			if (tmpA) {state = S0; disrespect = 1;} // I don't want to account for holding button
 			break;
 		case S1:
 			if (tmpA){
@@ -85,7 +86,7 @@ void Tick(){
 			if (!tmpA){state = S1_Rel;}
 			break;
 		case S1_Rel:
-			if (tmpA) {state = S0;} // I don't want to account for holding button
+			if (tmpA) {state = S0; disrespect = 1;} // I don't want to account for holding button
 			break;
 		case S2:
 			if (tmpA){
@@ -98,7 +99,7 @@ void Tick(){
 			if (!tmpA){state = S2_Rel;}
 			break;
 		case S2_Rel:
-			if (tmpA) {state = S0;} // I don't want to account for holding button
+			if (tmpA) {state = S0; disrespect = 1;} // I don't want to account for holding button
 			break;
 		default:
 			state = Start;
@@ -157,6 +158,8 @@ int main(void) {
 	TimerOn();
     while (1){
 	tmpA = ~PINA;
+	if (tmpA == 0){}
+	else if (disrespect == 1, tmpA == 1){tmpA =0;}
 	Tick();
 	PORTB = tmpC;
 	while(!TimerFlag);
