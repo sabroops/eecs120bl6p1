@@ -158,8 +158,8 @@ int main(void) {
 	TimerOn();
     while (1){
 	tmpA = ~PINA;
-	if (tmpA == 0){}
-	else if (disrespect == 1, tmpA == 1){tmpA =0;}
+	if (tmpA == 0){disrespect = 0;}
+	else if (disrespect == 1 && tmpA == 1){tmpA =0;}
 	Tick();
 	PORTB = tmpC;
 	while(!TimerFlag);
