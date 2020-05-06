@@ -54,7 +54,6 @@ enum States{Start, S0, S0_Press, S0_Rel, S1, S1_Press, S1_Rel, S2, S2_Press, S2_
 unsigned char  tmpA = 0;
 unsigned char tmpC = 0x00;
 unsigned char cnt = 0;
-unsigned char disrespect = 0;
 
 
 void Tick(){
@@ -66,40 +65,40 @@ void Tick(){
 			if (tmpA){
 				state = S0_Press;
 			}
-			else if (cnt %9 > 1) {state = S1;}
+			else if (cnt %3 == 1) {state = S1;}
 			else {state = S0;}
 			break;
 		case S0_Press: 
 			if (!tmpA){state = S0_Rel;}
 			break;
 		case S0_Rel:
-			if (tmpA) {state = S0; disrespect = 1;} // I don't want to account for holding button
+			if (tmpA) {state = S0;} // I don't want to account for holding button
 			break;
 		case S1:
 			if (tmpA){
 				state = S1_Press;
 			}
-			else if (cnt %9 > 4 ) {state = S2;}
+			else if (cnt %3 == 2) {state = S2;}
 			else {state = S1;}
                         break;
 		case S1_Press: 
 			if (!tmpA){state = S1_Rel;}
 			break;
 		case S1_Rel:
-			if (tmpA) {state = S0; disrespect = 1;} // I don't want to account for holding button
+			if (tmpA) {state = S0;} // I don't want to account for holding button
 			break;
 		case S2:
 			if (tmpA){
 				state = S2_Press;
 			}
-			else if (cnt % 9 > 7) {state = S0;}
+			else if (cnt %3 == 0) {state = S0;}
                         else {state = S2;}
                         break;
 		case S2_Press: 
 			if (!tmpA){state = S2_Rel;}
 			break;
 		case S2_Rel:
-			if (tmpA) {state = S0; disrespect = 1;} // I don't want to account for holding button
+			if (tmpA) {state = S0;} // I don't want to account for holding button
 			break;
 		default:
 			state = Start;
@@ -154,12 +153,10 @@ int main(void) {
     DDRA = 0x00; PORTA = 0xFF;
     DDRB = 0xFF; PORTB = 0x00;
     /* Insert your solution below */
-	TimerSet(100);
+	TimerSet(300);
 	TimerOn();
     while (1){
 	tmpA = ~PINA;
-	if (tmpA == 0){disrespect = 0;}
-	else if (disrespect == 1 && tmpA == 1){tmpA =0;}
 	Tick();
 	PORTB = tmpC;
 	while(!TimerFlag);
