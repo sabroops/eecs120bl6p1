@@ -92,7 +92,7 @@ void TimerSet(unsigned long M) {
 }
 
 
-enum States{Start, S0, S0_Press, S0_Rel, S1, S1_Press, S1_Rel, S2, S2_Press, S2_Rel, S3, S3_Press, S3_Rel} state;
+enum States{Start, S0, S0_Press, S0_Rel, S1, S1_Press, S1_Rel, S2, S2_Press, S2_Rel,} state;
 
 unsigned char  tmpA = 0;
 
@@ -105,63 +105,91 @@ unsigned char disrespect = 0;
 
 
 void Tick(){
+
 	switch(state){
+
 		case Start:
+
 			state=S0;
+
 			break;
+
 		case S0:
+
 			if (tmpA){
+
 				state = S0_Press;
+
 			}
-			else if (cnt %4 > 0) {state = S1;}
+
+			else if (cnt %9 > 0) {state = S1;}
+
 			else {state = S0;}
+
 			break;
+
 		case S0_Press: 
+
 			if (!tmpA){state = S0_Rel;}
+
 			break;
+
 		case S0_Rel:
+
 			if (tmpA) {state = S0; disrespect = 1;} // I don't want to account for holding button
+
 			break;
+
 		case S1:
+
 			if (tmpA){
+
 				state = S1_Press;
+
 			}
-			else if (cnt %4 > 1 ) {state = S2;}
+
+			else if (cnt %9 > 5 ) {state = S2;}
+
 			else {state = S1;}
+
                         break;
+
 		case S1_Press: 
+
 			if (!tmpA){state = S1_Rel;}
+
 			break;
+
 		case S1_Rel:
+
 			if (tmpA) {state = S0; disrespect = 1;} // I don't want to account for holding button
+
 			break;
+
 		case S2:
+
 			if (tmpA){
+
 				state = S2_Press;
+
 			}
-			else if (cnt % 4 > 2) {state = S3;}
+
+			else if (cnt % 9 > 6) {state = S0;}
+
                         else {state = S2;}
+
                         break;
+
 		case S2_Press: 
+
 			if (!tmpA){state = S2_Rel;}
+
 			break;
+
 		case S2_Rel:
 
-			if (tmpA) {state = S3; disrespect = 1;} // I don't want to account for holding button
-
-			break;
-		case S3:
-			if (tmpA){
-				state = S3_Press;
-			}
-			else if (cnt % 4 == 0) {state = S0;}
-                        else {state = S3;}
-                        break;
-		case S3_Press: 
-			if (!tmpA){state = S3_Rel;}
-			break;
-		case S3_Rel:
 			if (tmpA) {state = S0; disrespect = 1;} // I don't want to account for holding button
+
 			break;
 
 		default:
@@ -173,54 +201,81 @@ void Tick(){
 	}
 
 	switch(state){ //ACTIONS
+
 		case Start:
+
 			tmpC = 0x00;
+
 			break;
+
 		case S0:
+
 			tmpC = 0x01;
+
 			cnt++;
+
 			break;
+
 		case S0_Press:
+
 			tmpC = 0x01;
+
 			break;
+
 		case S0_Rel:
+
 			tmpC = 0x01;
-			cnt = 0;
+
+			//cnt = 0;
+
 			break;
+
 		case S1: 
+
 			tmpC = 0x02;
+
 			cnt++;
+
 			break;
+
 		case S1_Press:
+
 			tmpC = 0x02;
+
 			break;
+
 		case S1_Rel:
+
 			tmpC = 0x02;
-			cnt = 0;
+
+			//cnt = 0;
+
 			break;
+
                 case S2:
+
 			tmpC = 0x04;
+
 			cnt++;
+
 			break;
+
 		case S2_Press:
+
 			tmpC = 0x04;
+
 			break;
+
 		case S2_Rel:
+
 			tmpC = 0x04;
-			cnt = 0;
+
+			//cnt = 0;
+
 			break;
-                case S3:
-			tmpC = 0x02;
-			cnt++;
-			break;
-		case S3_Press:
-			tmpC = 0x02;
-			break;
-		case S3_Rel:
-			tmpC = 0x02;
-			cnt = 0;
-			break;
+
 		default:
+
 			break;
 
 	}
